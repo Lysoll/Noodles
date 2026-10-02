@@ -5,9 +5,11 @@ A two-part 3D-printable box (base + screw-on lid) that holds:
 - 1 × **QTEATAK 8 × AA battery holder** (with cover and ON/OFF switch)
 - 1 × **SMLBJUTE 22 mm red mushroom-head momentary push button** (1NO, SPST)
 
-Two output wires leave the box through the side wall. An internal zip-tie anchor gives them strain relief.
+Two output wires leave the box through the side wall. An internal zip-tie anchor gives them strain relief. A window in the end wall lets you reach the battery holder's own ON/OFF switch from outside.
 
 ![preview](preview.png)
+
+![switch window](switch-window.png)
 
 ## Files
 
@@ -25,6 +27,7 @@ The battery holder's dimensions are **estimates** (113 × 64 × 29 mm, including
 - `btn_body_d`: widest part of the button below the panel (nut across the corners)
 - `btn_depth`: how far the button sticks down below the panel, including the terminals and wire bends
 - `wire_d`: exit hole size (4 mm suits 18–22 AWG hook-up wire)
+- `sw_from_edge`, `sw_from_bottom`: where the holder's ON/OFF switch sits. Lay the holder flat with the switch end facing you, then measure from its left edge to the switch center, and from the table to the switch center. Set `switch_window = false` to leave the window out.
 
 To re-export: `openscad -D 'part="base"' -o base.stl button_box.scad` (repeat with `lid`), or open the file in OpenSCAD, set `part`, press F6, then F7.
 
@@ -54,11 +57,11 @@ Button terminal 2 ──────────► Output wire 1  (+, switched)
 Battery holder BLACK (−) ───► Output wire 2  (−)
 ```
 
-1. Put the battery holder in the main cavity with its **lead-wire/switch end facing the button compartment**. The side gaps near that end leave room for the leads.
+1. Put the battery holder in the main cavity with its **switch end against the end wall with the switch window**, on the same side as the wire exit holes. Push it in until the switch lines up with the window. Run the holder's red/black leads along the side gap (over the spacer) to the button compartment.
 2. Push the button through the lid hole from the top. Tighten the nut from underneath.
 3. Wire it as shown above. Solder or crimp, and cover the joints with heat-shrink.
 4. Feed the two output wires out through the side holes. Zip-tie them to the anchor bridge just inside the holes. (The tie goes through the tunnel under the bridge and over the wires.)
-5. Leave the holder's own ON/OFF switch **ON**. The button is momentary, so nothing draws power until it's pressed. You can still switch the holder off inside the box for storage.
+5. The holder's ON/OFF switch, reached through the end-wall window, is your master power switch. Turn it OFF for storage or transport so the button can't fire if it gets bumped.
 6. Screw the lid on. The ribs under the lid press the holder down so it doesn't rattle.
 
 To change the batteries, remove the 4 lid screws, lift out the holder, and slide off its cover.

@@ -31,6 +31,15 @@ wire_d        = 4.0;      // exit hole diameter (fits ~18-22 AWG hook-up wire; 4
 wire_count    = 2;        // number of exit holes
 wire_spacing  = 10;       // center-to-center spacing of exit holes
 
+// Battery holder ON/OFF switch window (in the end wall at X = 0).
+// Lay the holder flat, switch end facing you, and measure:
+switch_window  = true;
+sw_from_edge   = 10;      // left edge of holder -> centre of switch (mm)
+sw_from_bottom = 7;       // table -> centre of switch (mm)
+sw_win_w       = 16;      // window width  (inner, mm)
+sw_win_h       = 10;      // window height (inner, mm)
+sw_flare       = 3;       // outward flare so a fingertip can reach the slider
+
 // ---------------- ENCLOSURE SETTINGS ----------------
 wall      = 2.4;          // side wall thickness (6 perimeters @ 0.4 nozzle)
 floor_t   = 2.0;          // floor thickness
@@ -88,18 +97,32 @@ module base() {
         for (i = [0 : wire_count-1])
             translate([wire_x0 + i*wire_spacing, 1, wire_z])
                 rotate([90, 0, 0]) cylinder(d = wire_d, h = wall + post_r + 2);
+        // window for the battery holder's ON/OFF switch
+        if (switch_window) switch_cut();
     }
-    // side spacers: keep the holder centred but leave room near the button end
-    // for the holder's lead wires to come out
-    sp_len = holder_l - 22;
-    for (y = [0, IW - wire_gap])
-        translate([clr, y, 0]) cube([sp_len, wire_gap, 12]);
+    // side spacers keep the holder centred. On the Y=0 side the first 22 mm
+    // is left open where the holder's lead wires come out; the leads then run
+    // along that gap (above the spacer) to the button compartment.
+    translate([clr + 22, 0, 0]) cube([holder_l - 22, wire_gap, 12]);
+    translate([clr, IW - wire_gap, 0]) cube([holder_l, wire_gap, 12]);
     // end stops so the holder can't slide into the button compartment
     stop_x = clr + holder_l + clr;
     for (y = [wire_gap, IW - wire_gap - 4])
         translate([stop_x, y, 0]) cube([2, 4, 10]);
     // zip-tie anchor bridge under the exit holes (tie threads through along X)
     anchor();
+}
+
+// Switch window: holder's switch end sits against the X = 0 wall,
+// holder's left edge (switch end facing you) is on the Y = 0 side.
+module switch_cut() {
+    cy = wire_gap + clr + sw_from_edge;
+    cz = sw_from_bottom;
+    hull() {
+        translate([0.5, cy - sw_win_w/2, cz - sw_win_h/2]) cube([0.01, sw_win_w, sw_win_h]);
+        translate([-wall - 0.5, cy - sw_win_w/2 - sw_flare, cz - sw_win_h/2 - sw_flare])
+            cube([0.01, sw_win_w + 2*sw_flare, sw_win_h + 2*sw_flare]);
+    }
 }
 
 module anchor() {
